@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescriptions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">HealthCare System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person">Person Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalRecord">Medical Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/prescription">Prescriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalReports">Medical Reports</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1>Prescriptions</h1>
+
+    <div th:if="${isDoctor}">
+        <h2>Add Prescription</h2>
+        <form action="/addPrescription" method="post">
+            <div class="form-group">
+                <label for="personId">Person ID (optional):</label>
+                <input type="text" name="personId" id="personId" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="medicineId">Medicine:</label>
+                <select name="medicineId" id="medicineId" class="form-control">
+                    <option value="">Select Medicine</option>
+                    <option th:each="medicine : ${medicines}" th:value="${medicine.medicineId}" th:text="${medicine.medicineName}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="repeatable">Repeatable:</label>
+                <select name="repeatable" id="repeatable" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="frequency">Frequency:</label>
+                <input type="text" name="frequency" id="frequency" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="dosage">Dosage:</label>
+                <input type="text" name="dosage" id="dosage" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Prescription</button>
+        </form>
+    </div>
+
+    <h2 class="mt-5">Your Prescriptions</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Repeatable</th>
+            <th>Frequency</th>
+            <th>Dosage</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prescription : ${prescriptions}">
+            <td th:text="${prescription.medicine.medicineName}"></td>
+            <td th:text="${prescription.repeatable ? 'Yes' : 'No'}"></td>
+            <td th:text="${prescription.frequency}"></td>
+            <td th:text="${prescription.dosage}"></td>
+            <td>
+                <form action="/deletePrescription" method="post" style="display:inline;">
+                    <input type="hidden" name="prescriptionId" th:value="${prescription.prescriptionId}">
+                    <button type="submit" class="btn btn-danger">Taken</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

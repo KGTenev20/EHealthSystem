@@ -1,0 +1,23 @@
+INSERT INTO Person (EGN, PIK, FirstName, LastName, PhoneNumber) VALUES
+('1234567890', '123456', 'John', 'Doe', '555-1234'),
+('0000000000', '000000', 'Jane', 'Smith', '555-5678'),
+('9999999999', '159753', 'Kliment', 'Tenev', '555-9876');
+
+INSERT INTO PersonAD (PersonId, AdmissionDate, DischargeDate, Role) VALUES
+(1, '2023-01-01', '2023-01-10', 'Doctor'),
+(2, '2023-02-01', '2023-02-10', 'Patient'),
+(3, '2023-03-01', '2023-03-10', 'Doctor');
+
+INSERT INTO Medicine (MedicineName) VALUES
+('Aspirin'),
+('Analgin'),
+('Paracetamol');
+
+INSERT INTO Allergies (Allergy) VALUES('Peanuts'), ('Shellfish'), ('Pollen');
+
+INSERT INTO Symptoms (Symptom) VALUES('Cough'), ('Fever'), ('Headache');
+
+INSERT INTO Sicknesses (Sickness) VALUES
+('Flu'),
+('Cold'),
+('Migraine');

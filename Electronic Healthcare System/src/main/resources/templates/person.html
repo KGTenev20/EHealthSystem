@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">HealthCare System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person">Person Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalRecord">Medical Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/prescription">Prescriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalReports">Medical Reports</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1>Welcome, <span id="fullName"></span>!</h1>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th>First Name</th>
+            <td id="firstName"></td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td id="lastName"></td>
+        </tr>
+        <tr>
+            <th>EGN</th>
+            <td id="egn"></td>
+        </tr>
+        <tr>
+            <th>PIK</th>
+            <td id="pik"></td>
+        </tr>
+        <tr>
+            <th>Phone Number</th>
+            <td id="phoneNumber"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Admissions and Discharges</h2>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th>Admission Date</th>
+            <td id="admissionDate"></td>
+        </tr>
+        <tr>
+            <th>Discharge Date</th>
+            <td id="dischargeDate"></td>
+        </tr>
+        <tr>
+            <th>Role</th>
+            <td id="role"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("/api/person")
+            .then(response => response.json())
+            .then(person => {
+                document.getElementById("fullName").textContent = person.firstName + " " + person.lastName;
+                document.getElementById("firstName").textContent = person.firstName;
+                document.getElementById("lastName").textContent = person.lastName;
+                document.getElementById("egn").textContent = person.egn;
+                document.getElementById("pik").textContent = person.pik;
+                document.getElementById("phoneNumber").textContent = person.phoneNumber;
+
+                return person.personId;
+            })
+            .then(personId => {
+                if (personId) {
+                    fetch(`/api/person/ads`)
+                        .then(response => response.json())
+                        .then(personAds => {
+                            personAds.forEach(ad => {
+                                document.getElementById("admissionDate").textContent = new Date(ad.admissionDate).toLocaleDateString();
+                                document.getElementById("dischargeDate").textContent = ad.dischargeDate ? new Date(ad.dischargeDate).toLocaleDateString() : 'N/A';
+                                document.getElementById("role").textContent = ad.role;
+                            });
+                        });
+                }
+            });
+    });
+
+
+</script>
+</body>
+</html>

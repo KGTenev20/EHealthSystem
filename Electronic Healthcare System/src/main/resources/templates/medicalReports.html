@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Reports</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">HealthCare System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person">Person Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalRecord">Medical Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/prescription">Prescriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/medicalReports">Medical Reports</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Medical Reports</h1>
+
+    <div id="report-form" th:if="${isDoctor}">
+        <h2>Add Medical Report</h2>
+        <form action="/medicalReports/add" method="post">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea name="description" id="description" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="personId">Person ID:</label>
+                <input type="number" name="personId" id="personId" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Report</button>
+        </form>
+    </div>
+
+    <h2 class="mt-5">Your Medical Reports</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="report : ${medicalReports}">
+            <td th:text="${report.title}"></td>
+            <td th:text="${report.description}"></td>
+            <td>
+                <a th:href="@{'/medicalReports/download/' + ${report.title.replaceAll(' ', '_') + '.txt'}}" class="btn btn-info" target="_blank">Download</a>
+                <form th:action="@{'/medicalReports/delete/' + ${report.reportId}}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
